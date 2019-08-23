@@ -8,11 +8,13 @@ public class Person {
     private String secondName;
     private int age;
     private static int count;
+    private long personHash;
 
     Person (String firstName, String secondName, int age){
         this.firstName = firstName;
         this.secondName = secondName;
         this.age = age;
+        this.personHash = hashCode();
         count++;
     }
 
@@ -41,13 +43,12 @@ public class Person {
     }
 
 
-
     static {
-        System.out.println("First class loading.");
+        System.out.println("Loading once BEFORE class.");
     }
 
     {
-        System.out.println(count + " class loading.");
+        System.out.println(count + " time(s) class loaded.");
     }
 
     @Override
@@ -71,19 +72,24 @@ public class Person {
         return "Person{" +
                 "firstName='" + firstName + '\'' +
                 ", secondName='" + secondName + '\'' +
-                ", age=" + age +
+                ", age=" + age + '\'' +
+                ", hash=" +  personHash + '\'' +
                 '}';
     }
 
 
     public static void main(String[] args) {
-        Person person1 = new Person("Bill", "Lom", 60 );
-        Person person2 = new Person("Bill", "Lom", 60 );
+        Person person1 = new Person("Bill", "Lom", 50 );
+        Person person2 = new Person("Bill", "Lom", 50 );
         Person person3 = new Person("John", "Wick", 30 );
 
 
         System.out.println(person1==person2);
         System.out.println(person1.equals(person3));
         System.out.println(person1.equals(person2));
+
+        System.out.println(person1);
+        System.out.println(person2);
+        System.out.println(person3);
     }
 }
