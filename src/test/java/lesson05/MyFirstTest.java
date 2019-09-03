@@ -8,8 +8,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 //1. Напишите тест, похожий на рассмотренный на занятии 5 (ввод посикового запроса и проверка первой подсказки), только проверьте, что все подсказки выпадающего списка содержат вводимый текст.
@@ -18,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 //        2. Запустить сьют через мавен и через IDE.
 
 public class MyFirstTest extends TestBase {
-    static WebDriver driver;
+
 
     @Test(timeout = 5000l)
     public void verifyFirstTipIsCorrect() {
@@ -39,7 +41,15 @@ public class MyFirstTest extends TestBase {
                 driver.findElement(By.xpath("//*[@id='index']/div[2]/ul/li[1]")).getText().contains("Dress1"));
     }
 
+    @Test
+    public void verifyHintsContainText() {
+        String search = "Dress";
+        driver.findElement(By.id("search_query_top")).clear();
+        driver.findElement(By.id("search_query_top")).sendKeys(search);
+
+        List<WebElement> a = driver.findElements(By.xpath("//div[@class='ac_results']/ul/li"));
+        Assert.assertTrue(String.format("Not all Hints contain %s", search), a.stream().allMatch(i -> i.getText().contains(search)));
 
 
-
+    }
 }
