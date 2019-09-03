@@ -13,8 +13,6 @@ import java.util.concurrent.TimeUnit;
 
 public class MyFirstTest extends TestBase {
 
-    static WebDriver driver;
-
 
     @Test()
     public void verifyFirstTipIsCorrect() {
