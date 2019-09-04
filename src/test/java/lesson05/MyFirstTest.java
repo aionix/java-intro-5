@@ -11,8 +11,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 //1. Напишите тест, похожий на рассмотренный на занятии 5 (ввод посикового запроса и проверка первой подсказки), только проверьте, что все подсказки выпадающего списка содержат вводимый текст.
 //        1.1. Искать список всех подсказок через findElements;
@@ -44,12 +46,22 @@ public class MyFirstTest extends TestBase {
     @Test
     public void verifyHintsContainText() {
         String search = "Dress";
+        List<String> filteredSearchResult = new ArrayList<>();
+
         driver.findElement(By.id("search_query_top")).clear();
         driver.findElement(By.id("search_query_top")).sendKeys(search);
+        List<WebElement> searchList = driver.findElements(By.xpath("//div[@class='ac_results']/ul/li"));
+        //Adding Hints which don't contain search String
+        searchList.forEach(i -> { if (!(i.getText().contains(search))) {
+                filteredSearchResult.add(i.getText());
+            }});
 
-        List<WebElement> a = driver.findElements(By.xpath("//div[@class='ac_results']/ul/li"));
-        Assert.assertTrue(String.format("Not all Hints contain %s", search), a.stream().allMatch(i -> i.getText().contains(search)));
+        Assert.assertTrue(String.format("Not all Hints contain %s", search), searchList.stream().allMatch(i -> {
+            if (!i.getText().contains(search)) {
+                for (String s : filteredSearchResult) { System.out.println(s); }
+                return false;
+            }return true;
+        }));
 
 
-    }
-}
+    }}
