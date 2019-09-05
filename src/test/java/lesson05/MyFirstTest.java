@@ -46,21 +46,17 @@ public class MyFirstTest extends TestBase {
     @Test
     public void verifyHintsContainText() {
         String search = "Dress";
-        List<String> filteredSearchResult = new ArrayList<>();
-
         driver.findElement(By.id("search_query_top")).clear();
         driver.findElement(By.id("search_query_top")).sendKeys(search);
+        
         List<WebElement> searchList = driver.findElements(By.xpath("//div[@class='ac_results']/ul/li"));
-        //Adding Hints which don't contain search String
-        searchList.forEach(i -> { if (!(i.getText().contains(search))) {
-                filteredSearchResult.add(i.getText());
-            }});
 
         Assert.assertTrue(String.format("Not all Hints contain %s", search), searchList.stream().allMatch(i -> {
             if (!i.getText().contains(search)) {
-                for (String s : filteredSearchResult) { System.out.println(s); }
-                return false;
-            }return true;
+                for (WebElement s : searchList){
+                    if (!(s.getText().contains(search))) System.out.println(s.getText());
+                } return false;
+            } return true;
         }));
 
 
